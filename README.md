@@ -4,7 +4,7 @@ This is kaban style application like trello
 
 ## Live Link
 
-[]()
+[https://adeola-bemo.netlify.app/](https://adeola-bemo.netlify.app/)
 
 ## Development
 
