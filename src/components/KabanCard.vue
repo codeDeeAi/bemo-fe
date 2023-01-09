@@ -1,21 +1,13 @@
 <template>
     <li @click="toggleModal('showCardModal', `${reactiveCardData.id}-show-card-modal`)" class="kaban__card">
-        <p class="title">{{ reactiveCardData.title }}</p>
-        <!-- <div class="text" contenteditable="true">
-            {{ cardData.description }}
-        </div> -->
-        <!-- <div class="actions">
-            <button>Edit</button>
-            <button>Delete</button>
-        </div> -->
+        <p class="title">{{ cardData.title }}</p>
 
         <!-- Show Card Modal -->
-        <modal :name="`${reactiveCardData.id}-show-card-modal`" :height="330" :width="400">
+        <modal :name="`${cardData.id}-show-card-modal`" :height="330" :width="400">
             <div class="form__container">
-                <!-- <div class="error" v-if="newCardDetails.errors.length > 0"
-                    v-for="(error, errorIndex) in newCardDetails.errors" :key="errorIndex">
+                <div class="error" v-if="errors.length > 0" v-for="(error, errorIndex) in errors" :key="errorIndex">
                     {{ error }}
-                </div> -->
+                </div>
                 <label for="card_name">Title</label>
                 <input type="text" name="card_name" v-model="reactiveCardData.title">
 
@@ -23,7 +15,7 @@
                 <input type="text" name="card_description" v-model="reactiveCardData.description">
 
                 <div class="footer">
-                    <button type="button" @click="">Update Card</button>
+                    <button type="button" @click="updateDetails()">Update Card</button>
                 </div>
             </div>
         </modal>
@@ -40,11 +32,18 @@ export default {
             type: Object
         }
     },
+    watch: {
+        reactiveCardData() { },
+        cardData() {
+
+        }
+    },
     data() {
         return {
             store: useMainStore(),
             reactiveCardData: this.cardData,
             showCardModal: false,
+            errors: [],
         }
     },
     methods: {
@@ -52,6 +51,17 @@ export default {
             if (this[ref]) return this.$modal.hide(name);
             return this.$modal.show(name);
         },
+
+        updateDetails() {
+            this.errors = [];
+            if (!this.reactiveCardData.id) return;
+            if (this.reactiveCardData.title.trim().length == 0) return this.errors.push('Title is required !');
+            if (this.reactiveCardData.description.trim().length == 0) return this.errors.push('Description is required !');
+            this.store.updateCard({
+                ...this.reactiveCardData
+            });
+            this.toggleModal('showCardModal', `${this.cardData.id}-show-card-modal`)
+        }
     },
 }
 </script>

@@ -3,8 +3,8 @@ export const useMainStore = defineStore('main', {
     state: () => ({
         kabanData: [],
         accessToken: null,
-        apiPrefix: 'http://127.0.0.1:8000/api',
-        apiHost: 'http://127.0.0.1:8000',
+        apiPrefix: 'https://be-bemo.herokuapp.com/api',
+        apiHost: 'https://be-bemo.herokuapp.com',
         isLoading: false,
         csrf: '',
         apiDefaultHeaders: {
@@ -30,7 +30,6 @@ export const useMainStore = defineStore('main', {
         toggleLoading() {
             return this.isLoading = !this.isLoading;
         },
-        // gLYWxYbUEFK1wlXCfPPb4NqV8coynzcB9
         async csrf() {
             await fetch(`${this.apiHost}/sanctum/csrf-cookie`);
         },
@@ -158,6 +157,48 @@ export const useMainStore = defineStore('main', {
 
                 });
             this.toggleLoading();
+        },
+
+        async updateCardPositions() {
+            await fetch(`${this.apiPrefix}/cardPositions`, {
+                    method: "PATCH",
+                    body: JSON.stringify({ data: this.kabanData }),
+                    headers: {
+                        ...this.apiDefaultHeaders
+                    }
+                })
+                .then(response => response.json())
+                .then(response => {})
+                .catch(error => {
+
+                });
+        },
+
+        async updateCard(data) {
+            if (!data.id) return;
+            if (data.title.trim().length == 0) return;
+            if (data.title.trim().description == 0) return;
+            await fetch(`${this.apiPrefix}/card/${data.id}`, {
+                    method: "PATCH",
+                    body: JSON.stringify(data),
+                    headers: {
+                        ...this.apiDefaultHeaders
+                    }
+                })
+                .then(response => response.json())
+                .then(response => {
+                    let { card } = response;
+                    kabanIndex = this.kabanData.findIndex((item) => {
+                        return item.id == card.kaban_column_id;
+                    });
+                    cardIndex = this.kabanData[kabanIndex].cards.findIndex((item) => {
+                        return item.id == card.id;
+                    });
+                    this.kabanData[kabanIndex].cards[cardIndex] = card;
+                })
+                .catch(error => {
+
+                });
         },
     },
 });

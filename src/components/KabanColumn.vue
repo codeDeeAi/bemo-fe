@@ -60,6 +60,14 @@ export default {
         KabanCard,
         draggable
     },
+    watch: {
+        columnData: {
+            deep: true,
+            handler() {
+
+            }
+        }
+    },
     data() {
         return {
             store: useMainStore(),

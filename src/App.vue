@@ -24,6 +24,12 @@ export default {
     }
   },
   watch:{
+    'store.kabanData':{
+      deep:true,
+      handler(){
+        this.store.updateCardPositions();
+      }
+    }
   },
   
   created() {
