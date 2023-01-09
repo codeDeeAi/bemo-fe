@@ -26,11 +26,12 @@ export default {
 @import url("https://fonts.googleapis.com/css?family=Fira+Sans");
 
 .kaban__main__container {
-    width: 500% !important;
+    width: 100% !important;
+    display: -webkit-box !important;
     height: 95vh !important;
     display: flex;
     justify-items: start;
-    overflow-x: scroll;
+    overflow-x: auto;
     overflow-y: hidden;
     gap: 15px;
     position: fixed;

@@ -43,5 +43,7 @@ export default {
 </script>
 
 <style scoped>
-
+.main{
+  margin: 0 !important;
+}
 </style>
